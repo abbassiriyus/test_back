@@ -8,7 +8,7 @@ router.post('/register', async (req, res) => {
     try {
       // Check if the username already exists
       const checkQuery = 'SELECT * FROM users WHERE username = $1';
-      const checkResult = await pool.query(checkQuery, [username]);
+      const checkResult = await db.query(checkQuery, [username]);
   
       if (checkResult.rows.length > 0) {
         return res.status(400).json({ error: 'Username already taken' });
@@ -20,7 +20,7 @@ router.post('/register', async (req, res) => {
   
       // Insert the new user into the database
       const insertQuery = 'INSERT INTO users (username, password) VALUES ($1, $2)';
-      await pool.query(insertQuery, [username, hashedPassword]);
+      await db.query(insertQuery, [username, hashedPassword]);
   
       return res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
@@ -36,7 +36,7 @@ router.post('/login', async (req, res) => {
     try {
       // Retrieve the user from the database
       const selectQuery = 'SELECT * FROM users WHERE username = $1';
-      const selectResult = await pool.query(selectQuery, [username]);
+      const selectResult = await db.query(selectQuery, [username]);
   
       if (selectResult.rows.length === 0) {
         return res.status(401).json({ error: 'Invalid username or password' });

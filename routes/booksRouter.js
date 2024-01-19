@@ -7,10 +7,8 @@ router.post('/books', (req, res) => {
     try {
       // Read the JSON data from the file
       const jsonData = fs.readFileSync(req.files.file.path, 'utf-8');
-  
       // Parse the JSON data
       const booksData = JSON.parse(jsonData);
-  
       // Iterate over the books data and insert into the database
       booksData.forEach(async (book) => {
         const {
@@ -55,6 +53,9 @@ router.get('/books', async (req, res) => {
       return res.status(500).json({ error: 'Internal server error' });
     }
   });
+
+
+
   
   // GET endpoint for fetching a single book by ID
 router.get('/books/:id', async (req, res) => {
