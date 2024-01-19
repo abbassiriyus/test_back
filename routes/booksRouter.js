@@ -1,7 +1,7 @@
 const express = require('express');
 const db = require('../db.js');
 const router = express.Router();
-
+const fs =require('fs')
 // POST endpoint for inserting book data
 router.post('/books', (req, res) => {
     try {
