@@ -1,10 +1,10 @@
 const express = require('express');
 const db = require('../db.js');
-
+const bcrypt=require("bcrypt")
 const router = express.Router();
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
-  
+
     try {
       // Check if the username already exists
       const checkQuery = 'SELECT * FROM users WHERE username = $1';
