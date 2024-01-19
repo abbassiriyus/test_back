@@ -4,16 +4,13 @@ const bcrypt=require("bcrypt")
 const router = express.Router();
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
-
     try {
       // Check if the username already exists
       const checkQuery = 'SELECT * FROM users WHERE username = $1';
       const checkResult = await db.query(checkQuery, [username]);
-  
       if (checkResult.rows.length > 0) {
         return res.status(400).json({ error: 'Username already taken' });
       }
-  
       // Hash the password
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
