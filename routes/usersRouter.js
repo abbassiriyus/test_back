@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('../db.js');
 const bcrypt=require("bcrypt")
+const jwt=require('jsonwebtoken')
 const router = express.Router();
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
@@ -14,13 +15,12 @@ router.post('/register', async (req, res) => {
       // Hash the password
       const saltRounds = 10;
       const hashedPassword = await bcrypt.hash(password, saltRounds);
-  
+      const token = jwt.sign({ username:username, password: hashedPassword}, 'your_secret_key');
       // Insert the new user into the database
-      const insertQuery = 'INSERT INTO users (username, password) VALUES ($1, $2)';
+      const insertQuery ='INSERT INTO users (username, password) VALUES ($1, $2)';
       await db.query(insertQuery, [username, hashedPassword]);
-  
-      return res.status(201).json({ message: 'User registered successfully' });
-    } catch (error) {
+      return res.status(201).json({token:token, message: 'User registered successfully' });
+    } catch (error){
       console.error('Error during registration:', error);
       return res.status(500).json({ error: 'Internal server error' });
     }
